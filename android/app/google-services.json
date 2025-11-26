@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "861237053677",
+    "project_id": "myledger-f3313",
+    "storage_bucket": "myledger-f3313.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861237053677:android:b3e3409be2b8042a4e64e4",
+        "android_client_info": {
+          "package_name": "mt.myledger"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgb6bLWzkfSGOQfpgxFcRv5awim_oadSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

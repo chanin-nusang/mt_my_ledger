@@ -1,0 +1,15 @@
+{
+    "Simulator Target Bundle": "mt.myledger",
+    "aps": {
+        "alert": {
+            "title": "Photo incoming",
+            "body": "Check out this image"
+        },
+        "badge": 1,
+        "sound": "default",
+        "mutable-content": 1
+    },
+    "fcm_options": {
+        "image": "https://placehold.co/600x400.jpg"
+    }
+}
