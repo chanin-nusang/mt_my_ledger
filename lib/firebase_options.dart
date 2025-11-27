@@ -49,30 +49,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAD2FoTBJpQJKzELwOsCJ361Pl_AyHRLnM',
-    appId: '1:861237053677:ios:77e29662a7c490bf4e64e4',
-    messagingSenderId: '861237053677',
-    projectId: 'myledger-f3313',
-    storageBucket: 'myledger-f3313.firebasestorage.app',
+    apiKey: 'AIzaSyAdF4-7BibM8UPfjjhQui6L8QTcV58KvO8',
+    appId: '1:799772657638:ios:a6066f567e1ab055a7f827',
+    messagingSenderId: '799772657638',
+    projectId: 'mt-myledger',
+    storageBucket: 'mt-myledger.firebasestorage.app',
     iosBundleId: 'mt.myledger',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCgb6bLWzkfSGOQfpgxFcRv5awim_oadSA',
-    appId: '1:861237053677:android:b3e3409be2b8042a4e64e4',
-    messagingSenderId: '861237053677',
-    projectId: 'myledger-f3313',
-    storageBucket: 'myledger-f3313.firebasestorage.app',
+    apiKey: 'AIzaSyBvQXmnJG39p-cV9d_M1lrvG99k3ATuy-A',
+    appId: '1:799772657638:android:afdf04fbf5d60a9ba7f827',
+    messagingSenderId: '799772657638',
+    projectId: 'mt-myledger',
+    storageBucket: 'mt-myledger.firebasestorage.app',
   );
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDbC07ruBS-OBBjyYcbCvNJed4uE7x7oy4',
-    appId: '1:861237053677:web:d902e730e83c74c94e64e4',
-    messagingSenderId: '861237053677',
-    projectId: 'myledger-f3313',
-    authDomain: 'myledger-f3313.firebaseapp.com',
-    storageBucket: 'myledger-f3313.firebasestorage.app',
-    measurementId: 'G-676B7BTNXR',
+    apiKey: 'AIzaSyDfWxqGUi1ugJMh_MjjlCyDhT0qCcDvycE',
+    appId: '1:799772657638:web:b5fef1bf82dcc04fa7f827',
+    messagingSenderId: '799772657638',
+    projectId: 'mt-myledger',
+    authDomain: 'mt-myledger.firebaseapp.com',
+    storageBucket: 'mt-myledger.firebasestorage.app',
+    measurementId: 'G-BRX0Z9XEJ4',
   );
 
 }
