@@ -1,1 +1,45 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"myledger-f3313","appId":"1:861237053677:android:b3e3409be2b8042a4e64e4","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"myledger-f3313","appId":"1:861237053677:ios:77e29662a7c490bf4e64e4","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"myledger-f3313","configurations":{"android":"1:861237053677:android:b3e3409be2b8042a4e64e4","ios":"1:861237053677:ios:77e29662a7c490bf4e64e4","web":"1:861237053677:web:d902e730e83c74c94e64e4"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "mt-myledger",
+          "appId": "1:799772657638:android:afdf04fbf5d60a9ba7f827",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "mt-myledger",
+          "appId": "1:799772657638:ios:a6066f567e1ab055a7f827",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "mt-myledger",
+          "configurations": {
+            "android": "1:799772657638:android:afdf04fbf5d60a9ba7f827",
+            "ios": "1:799772657638:ios:a6066f567e1ab055a7f827",
+            "web": "1:799772657638:web:b5fef1bf82dcc04fa7f827"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
