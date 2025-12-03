@@ -50,7 +50,12 @@ void main() async {
   final transactionBox = await Hive.openBox<Transaction>('transactions');
   final categoryBox = await Hive.openBox<Category>('categories');
   final authRepository = AuthRepository();
-  Gemini.init(apiKey: dotenv.env['GEMINI_API_KEY']!);
+  const geminiApiKey =
+      String.fromEnvironment('GEMINI_API_KEY', defaultValue: '');
+  if (geminiApiKey.isEmpty && dotenv.env['GEMINI_API_KEY'] == null) {
+    throw 'GEMINI_API_KEY is not set.';
+  }
+  Gemini.init(apiKey: geminiApiKey.isNotEmpty ? geminiApiKey : dotenv.env['GEMINI_API_KEY']!);
 
   runApp(
     MyApp(
