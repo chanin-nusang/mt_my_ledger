@@ -127,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       return TransactionListItem(transaction: transaction);
                     },
                   ),
-                  SizedBox(height: 100,)
+                  SizedBox(height: 100),
                 ],
               ),
             );

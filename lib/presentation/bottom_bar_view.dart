@@ -152,7 +152,7 @@ class _BottomBarViewState extends State<BottomBarView>
                       decoration: BoxDecoration(
                         color: Color(0xFF2633C5),
                         gradient: LinearGradient(
-                          colors: [Color(0xFF2633C5), Color(0x6A88E5)],
+                          colors: [Color(0xFF2633C5), Color(0x006a88e5)],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),

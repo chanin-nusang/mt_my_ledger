@@ -1,17 +1,16 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mt_my_ledger/presentation/add_transaction_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mt_my_ledger/bloc/transaction_bloc.dart';
-import 'package:mt_my_ledger/bloc/transaction_event.dart';
+import 'package:mt_my_ledger/bloc/auth/auth_bloc.dart';
 import 'package:mt_my_ledger/gen/assets.gen.dart';
 import 'package:mt_my_ledger/models/tab_icon_data.dart';
-import 'package:mt_my_ledger/presentation/add_transaction_screen.dart';
 import 'package:mt_my_ledger/presentation/all_transactions_screen.dart';
 import 'package:mt_my_ledger/presentation/bottom_bar_view.dart';
 import 'package:mt_my_ledger/presentation/category_screen.dart';
 import 'package:mt_my_ledger/presentation/home_screen.dart';
 import 'package:mt_my_ledger/presentation/settings_screen.dart';
+import 'package:mt_my_ledger/presentation/welcome_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -138,36 +137,46 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder<bool>(
-        future: getData(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          if (!snapshot.hasData) {
-            return const SizedBox();
-          } else {
-            return Stack(
-              children: <Widget>[
-                tabBody,
-                Column(
-                  children: <Widget>[
-                    const Expanded(child: SizedBox()),
-                    BottomBarView(
-                      tabIconsList: tabIconsList,
-                      addClick: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) => const AddTransactionScreen(),
-                        );
-                      },
-                      changeIndex: _onItemTapped,
-                    ),
-                  ],
-                ),
-              ],
-            );
-          }
-        },
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state.status == AuthStatus.unauthenticated) {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+            (route) => false,
+          );
+        }
+      },
+      child: Scaffold(
+        body: FutureBuilder<bool>(
+          future: getData(),
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            if (!snapshot.hasData) {
+              return const SizedBox();
+            } else {
+              return Stack(
+                children: <Widget>[
+                  tabBody,
+                  Column(
+                    children: <Widget>[
+                      const Expanded(child: SizedBox()),
+                      BottomBarView(
+                        tabIconsList: tabIconsList,
+                        addClick: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) => const AddTransactionScreen(),
+                          );
+                        },
+                        changeIndex: _onItemTapped,
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            }
+          },
+        ),
       ),
     );
   }

@@ -68,7 +68,7 @@ class CategoryScreen extends StatelessWidget {
   }
 
   void _showCategoryDialog(BuildContext context, {Category? category}) {
-    final _nameController = TextEditingController(text: category?.name);
+    final nameController = TextEditingController(text: category?.name);
     final isEditing = category != null;
 
     showDialog(
@@ -77,7 +77,7 @@ class CategoryScreen extends StatelessWidget {
         return AlertDialog(
           title: Text(isEditing ? 'Edit Category' : 'Add Category'),
           content: TextField(
-            controller: _nameController,
+            controller: nameController,
             decoration: const InputDecoration(labelText: 'Category Name'),
           ),
           actions: [
@@ -87,7 +87,7 @@ class CategoryScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                final name = _nameController.text;
+                final name = nameController.text;
                 if (name.isNotEmpty) {
                   if (isEditing) {
                     final updatedCategory = Category(

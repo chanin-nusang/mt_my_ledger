@@ -202,7 +202,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         _category = state.categories.first.name;
                       }
                       return DropdownButtonFormField<String>(
-                        value: _category,
+                        initialValue: _category,
                         items: state.categories
                             .map(
                               (category) => DropdownMenuItem(

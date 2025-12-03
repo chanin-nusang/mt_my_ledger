@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mt_my_ledger/bloc/auth/auth_bloc.dart';
 import 'package:mt_my_ledger/bloc/theme_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,7 +44,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ตั้งค่า')),
+      appBar: AppBar(
+        title: const Text('ตั้งค่า'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              context.read<AuthBloc>().add(AuthLogoutRequested());
+            },
+          ),
+        ],
+      ),
       body: ListView(
         children: [
           BlocBuilder<ThemeBloc, ThemeState>(
