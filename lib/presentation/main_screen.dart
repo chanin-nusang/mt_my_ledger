@@ -1,5 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:mt_my_ledger/core/extensions/screen_utils.dart';
 import 'package:mt_my_ledger/presentation/add_transaction_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:mt_my_ledger/bloc/auth/auth_bloc.dart';
@@ -10,6 +12,7 @@ import 'package:mt_my_ledger/presentation/bottom_bar_view.dart';
 import 'package:mt_my_ledger/presentation/category_screen.dart';
 import 'package:mt_my_ledger/presentation/home_screen.dart';
 import 'package:mt_my_ledger/presentation/settings_screen.dart';
+import 'package:mt_my_ledger/presentation/side_navigation_rail.dart';
 import 'package:mt_my_ledger/presentation/welcome_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -153,6 +156,24 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             if (!snapshot.hasData) {
               return const SizedBox();
             } else {
+              if (!context.isMobile) {
+                return Row(
+                  children: [
+                    SideNavigationRail(
+                      tabIconsList: tabIconsList,
+                      onIndexChanged: _onItemTapped,
+                      addClick: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) => const AddTransactionScreen(),
+                        );
+                      },
+                    ),
+                    Expanded(child: tabBody),
+                  ],
+                );
+              }
               return Stack(
                 children: <Widget>[
                   tabBody,
