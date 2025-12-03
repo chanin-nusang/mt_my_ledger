@@ -37,6 +37,11 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image.asset(
+                'assets/images/myledger_rounded_512.png',
+                height: 100.0,
+              ),
+              const SizedBox(height: 20),
               const Text(
                 'Welcome to My Ledger',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
