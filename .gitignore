@@ -46,3 +46,6 @@ app.*.map.json
 
 # Secrets
 .env
+
+# Firebase
+.firebase/

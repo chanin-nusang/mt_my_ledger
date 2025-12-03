@@ -254,7 +254,7 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen>
                                     ? Color(0xFFF49097)
                                     : Color(0xFF55D6C2),
                                 fontSize: 16,
-                                fontWeight: FontWeight.w500
+                                fontWeight: FontWeight.w500,
                               ),
                             );
                           },

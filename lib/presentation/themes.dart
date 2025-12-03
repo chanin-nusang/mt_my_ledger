@@ -1,7 +1,6 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mt_my_ledger/gen/assets.gen.dart';
 
 /// The [AppTheme] defines light and dark themes for the app.
 ///
