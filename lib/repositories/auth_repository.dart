@@ -15,7 +15,9 @@ class AuthRepository {
             clientId: kIsWeb
                 ? "799772657638-mgpgj8t4hs6a6vngur24t2ei6rmh75mk.apps.googleusercontent.com"
                 : null,
-            serverClientId: !kIsWeb ? "799772657638-mgpgj8t4hs6a6vngur24t2ei6rmh75mk.apps.googleusercontent.com" : null,
+            serverClientId: !kIsWeb
+                ? "799772657638-mgpgj8t4hs6a6vngur24t2ei6rmh75mk.apps.googleusercontent.com"
+                : null,
           );
 
   Stream<User?> get user {

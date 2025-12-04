@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mt_my_ledger/bloc/auth/auth_bloc.dart';
 import 'package:mt_my_ledger/bloc/transaction_bloc.dart';
 import 'package:mt_my_ledger/bloc/transaction_state.dart';
+import 'package:mt_my_ledger/core/extensions/screen_utils.dart';
 import 'package:mt_my_ledger/models/transaction.dart';
 import 'package:mt_my_ledger/presentation/widgets/transaction_list_item.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -61,7 +64,59 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('รายรับรายจ่ายของฉัน')),
+      appBar: AppBar(
+        title: const Text('รายรับรายจ่ายของฉัน'),
+        actions: [
+          BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
+              final photoURL = state.user?.photoURL;
+              return Row(
+                children: [
+                  if (!context.isMobile) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        state.user!.email ?? '',
+                        style: Theme.of(context).textTheme.bodySmall,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                  if (photoURL != null)
+                    ClipOval(
+                      child: CachedNetworkImage(
+                        imageUrl: photoURL,
+                        width: 40,
+                        height: 40,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => CircleAvatar(
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primaryContainer,
+                          radius: 24,
+                          child: Icon(Icons.person),
+                        ),
+                      ),
+                    )
+                  else
+                    CircleAvatar(
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.primaryContainer,
+                      radius: 24,
+                      child: Icon(Icons.person),
+                    ),
+                  const SizedBox(width: 16),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
       body: BlocBuilder<TransactionBloc, TransactionState>(
         builder: (context, state) {
           if (state is TransactionLoading) {

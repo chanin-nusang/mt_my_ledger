@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mt_my_ledger/core/extensions/screen_utils.dart';
@@ -9,11 +10,13 @@ class SideNavigationRail extends StatefulWidget {
     required this.tabIconsList,
     required this.onIndexChanged,
     this.addClick,
+    this.user,
   });
 
   final List<TabIconData> tabIconsList;
   final ValueChanged<int> onIndexChanged;
   final Function()? addClick;
+  final User? user;
 
   @override
   State<SideNavigationRail> createState() => _SideNavigationRailState();
@@ -56,42 +59,47 @@ class _SideNavigationRailState extends State<SideNavigationRail> {
         );
       }).toList(),
       leading: SizedBox(
-        width: _railWidth,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
+        width: context.isDesktop ? _railWidth : null,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              margin: EdgeInsets.only(top: 8.0),
-              height: 56,
-              width: 56,
-              // alignment: Alignment.center,s
-              decoration: BoxDecoration(
-                color: Color(0xFF2633C5),
-                gradient: LinearGradient(
-                  colors: [Color(0xFF2633C5), Color(0x006a88e5)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                shape: BoxShape.circle,
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: Color(0xFF2633C5).withOpacity(0.4),
-                    offset: const Offset(0.0, 8.0),
-                    blurRadius: 8.0,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: 8.0),
+                  height: 56,
+                  width: 56,
+                  // alignment: Alignment.center,s
+                  decoration: BoxDecoration(
+                    color: Color(0xFF2633C5),
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF2633C5), Color(0x006a88e5)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    shape: BoxShape.circle,
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: Color(0xFF2633C5).withValues(alpha: 0.4),
+                        offset: const Offset(0.0, 8.0),
+                        blurRadius: 8.0,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.white.withOpacity(0.1),
-                  highlightColor: Colors.transparent,
-                  focusColor: Colors.transparent,
-                  onTap: widget.addClick,
-                  child: Icon(Icons.add, color: Colors.white, size: 32),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      splashColor: Colors.white.withValues(alpha: 0.1),
+                      highlightColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      onTap: widget.addClick,
+                      child: Icon(Icons.add, color: Colors.white, size: 32),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
         ),
