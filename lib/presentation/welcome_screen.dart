@@ -18,7 +18,8 @@ class WelcomeScreen extends StatelessWidget {
           String? errorMessage;
           try {
             // Attempt to read common error/message fields dynamically to avoid compile-time dependency
-            errorMessage = (state as dynamic).error ?? (state as dynamic).message;
+            errorMessage =
+                (state as dynamic).error ?? (state as dynamic).message;
           } catch (_) {
             errorMessage = null;
           }

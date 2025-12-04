@@ -1,6 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:mt_my_ledger/core/extensions/screen_utils.dart';
 import 'package:mt_my_ledger/presentation/add_transaction_screen.dart';
 import 'package:flutter/material.dart';
@@ -159,14 +158,20 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               if (!context.isMobile) {
                 return Row(
                   children: [
-                    SideNavigationRail(
-                      tabIconsList: tabIconsList,
-                      onIndexChanged: _onItemTapped,
-                      addClick: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) => const AddTransactionScreen(),
+                    BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, state) {
+                        return SideNavigationRail(
+                          tabIconsList: tabIconsList,
+                          onIndexChanged: _onItemTapped,
+                          user: state.user,
+                          addClick: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              builder: (context) =>
+                                  const AddTransactionScreen(),
+                            );
+                          },
                         );
                       },
                     ),

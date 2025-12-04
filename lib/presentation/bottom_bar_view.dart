@@ -159,7 +159,7 @@ class _BottomBarViewState extends State<BottomBarView>
                         shape: BoxShape.circle,
                         boxShadow: <BoxShadow>[
                           BoxShadow(
-                            color: Color(0xFF2633C5).withOpacity(0.4),
+                            color: Color(0xFF2633C5).withValues(alpha: 0.4),
                             offset: const Offset(0.0, 8.0),
                             blurRadius: 8.0,
                           ),
@@ -168,7 +168,7 @@ class _BottomBarViewState extends State<BottomBarView>
                       child: Material(
                         color: Colors.transparent,
                         child: InkWell(
-                          splashColor: Colors.white.withOpacity(0.1),
+                          splashColor: Colors.white.withValues(alpha: 0.1),
                           highlightColor: Colors.transparent,
                           focusColor: Colors.transparent,
                           onTap: widget.addClick,
