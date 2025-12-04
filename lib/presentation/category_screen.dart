@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mt_my_ledger/bloc/category_bloc.dart';
 import 'package:mt_my_ledger/bloc/category_event.dart';
 import 'package:mt_my_ledger/bloc/category_state.dart';
+import 'package:mt_my_ledger/generated/locale_keys.g.dart';
 import 'package:mt_my_ledger/models/category.dart';
 import 'package:uuid/uuid.dart';
 
@@ -13,13 +15,13 @@ class CategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('หมวดหมู่'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => _showCategoryDialog(context),
-          ),
-        ],
+        title: Text(LocaleKeys.category.tr()),
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.add),
+        //     onPressed: () => _showCategoryDialog(context),
+        //   ),
+        // ],
       ),
       body: BlocBuilder<CategoryBloc, CategoryState>(
         builder: (context, state) {
@@ -60,7 +62,7 @@ class CategoryScreen extends StatelessWidget {
           } else if (state is CategoryError) {
             return Center(child: Text(state.message));
           } else {
-            return const Center(child: Text('No categories yet.'));
+            return Center(child: Text(LocaleKeys.no_categories_yet.tr()));
           }
         },
       ),
@@ -75,15 +77,21 @@ class CategoryScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(isEditing ? 'Edit Category' : 'Add Category'),
+          title: Text(
+            isEditing
+                ? LocaleKeys.edit_category.tr()
+                : LocaleKeys.add_category.tr(),
+          ),
           content: TextField(
             controller: nameController,
-            decoration: const InputDecoration(labelText: 'Category Name'),
+            decoration: InputDecoration(
+              labelText: LocaleKeys.category_name.tr(),
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(LocaleKeys.cancel.tr()),
             ),
             TextButton(
               onPressed: () {
@@ -107,7 +115,9 @@ class CategoryScreen extends StatelessWidget {
                   Navigator.pop(context);
                 }
               },
-              child: Text(isEditing ? 'Update' : 'Add'),
+              child: Text(
+                isEditing ? LocaleKeys.update.tr() : LocaleKeys.add.tr(),
+              ),
             ),
           ],
         );

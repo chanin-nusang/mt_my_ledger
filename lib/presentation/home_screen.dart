@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mt_my_ledger/bloc/auth/auth_bloc.dart';
 import 'package:mt_my_ledger/bloc/transaction_bloc.dart';
 import 'package:mt_my_ledger/bloc/transaction_state.dart';
 import 'package:mt_my_ledger/core/extensions/screen_utils.dart';
+import 'package:mt_my_ledger/generated/locale_keys.g.dart';
 import 'package:mt_my_ledger/models/transaction.dart';
 import 'package:mt_my_ledger/presentation/widgets/transaction_list_item.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -65,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('รายรับรายจ่ายของฉัน'),
+        title: Text(LocaleKeys.my_revenue_and_expenses.tr()),
         actions: [
           BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
@@ -145,9 +146,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     totalAmount: totalAmount,
                     today: today,
                   ),
-                  const Padding(
-                    padding: EdgeInsetsGeometry.symmetric(vertical: 20),
-                    child: Text('กด + เพื่อเพิ่มรายการใช้จ่าย'),
+                  Padding(
+                    padding: const EdgeInsetsGeometry.symmetric(vertical: 20),
+                    child: Text(LocaleKeys.press_to_add_transaction.tr()),
                   ),
                 ],
               );
@@ -165,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      'ค่าใช้จ่ายวันนี้',
+                      LocaleKeys.todays_expenses.tr(),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 18,
@@ -236,10 +237,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         0.0,
         (sum, item) => sum + item.value,
       );
-      pieChartDataMap['อื่น ๆ'] = otherAmount;
+      pieChartDataMap[LocaleKeys.others.tr()] = otherAmount;
       legendData.add({
         'color': colorList[2],
-        'name': 'อื่น ๆ',
+        'name': LocaleKeys.others.tr(),
         'percent': (otherAmount / totalAmount.abs()) * 100,
       });
     }
@@ -284,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       Row(
                         children: [
                           Text(
-                            'ยอดรวมวันนี้',
+                            LocaleKeys.total_today.tr(),
                             style: TextStyle(
                               color: Theme.of(
                                 context,
@@ -342,7 +343,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           animation: animation!,
                           builder: (context, child) {
                             return Text(
-                              'จำนวน ${(todaysTransactions.length * animation!.value).toStringAsFixed(0)} รายการ',
+                              LocaleKeys.items_count.tr(args: [(todaysTransactions.length * animation!.value).toStringAsFixed(0)]),
                               style: TextStyle(
                                 color: Theme.of(
                                   context,
@@ -354,7 +355,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         )
                       else
                         Text(
-                          'ยังไม่มีรายการใช้จ่ายวันนี้',
+                          LocaleKeys.no_transactions_today.tr(),
 
                           style: TextStyle(
                             color: Theme.of(
@@ -387,7 +388,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             ),
 
                             Text(
-                              ' ของงบฯ ที่จำกัดไว้',
+                              ' ${LocaleKeys.of_spending_limit.tr()}',
                               style: TextStyle(
                                 color: Theme.of(
                                   context,

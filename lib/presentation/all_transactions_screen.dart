@@ -1,9 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mt_my_ledger/bloc/transaction_bloc.dart';
 import 'package:mt_my_ledger/bloc/transaction_state.dart';
+import 'package:mt_my_ledger/generated/locale_keys.g.dart';
 import 'package:mt_my_ledger/models/transaction.dart';
 import 'package:mt_my_ledger/presentation/widgets/transaction_list_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +23,7 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen>
   late int _selectedMonth;
   late int _selectedYear;
   double? spendingLimit;
-  final numberFormat = NumberFormat('#,##0.00', 'th_TH');
+  late NumberFormat numberFormat;
 
   @override
   void initState() {
@@ -44,6 +45,12 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen>
     _selectedYear = now.year;
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    numberFormat = NumberFormat('#,##0.00', context.locale.toString());
+  }
+
   Future<void> _loadSpendingLimit() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -55,7 +62,7 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('รายการทั้งหมด'),
+        title: Text(LocaleKeys.all_transactions.tr()),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
@@ -65,7 +72,8 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen>
                 return DropdownMenuItem<int>(
                   value: index + 1,
                   child: Text(
-                    DateFormat.MMMM('th_TH').format(DateTime(0, index + 1)),
+                    DateFormat.MMMM(context.locale.toString())
+                        .format(DateTime(0, index + 1)),
                   ),
                 );
               }),
@@ -99,7 +107,12 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen>
             if (transactions.isEmpty) {
               return Center(
                 child: Text(
-                  'ยังไม่มีบันทึกค่าใช้จ่ายในเดือน ${DateFormat.MMMM('th_TH').format(DateTime(0, _selectedMonth))}',
+                  LocaleKeys.no_transactions_in_month.tr(
+                    args: [
+                      DateFormat.MMMM(context.locale.toString())
+                          .format(DateTime(0, _selectedMonth))
+                    ],
+                  ),
                 ),
               );
             }
@@ -146,7 +159,7 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen>
           } else if (state is TransactionError) {
             return Center(child: Text(state.message));
           } else {
-            return const Center(child: Text('ไม่มีรายการค่าใช้จ่าย'));
+            return Center(child: Text(LocaleKeys.no_transactions_yet.tr()));
           }
         },
       ),
@@ -206,7 +219,12 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen>
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        'ยอดรวมเดือน ${DateFormat.MMMM('th_TH').format(DateTime(0, _selectedMonth))}',
+                        LocaleKeys.total_for_month.tr(
+                          args: [
+                            DateFormat.MMMM(context.locale.toString())
+                                .format(DateTime(0, _selectedMonth))
+                          ],
+                        ),
                         style: TextStyle(
                           color: Theme.of(
                             context,
@@ -236,7 +254,7 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen>
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          'เฉลี่ยวันละ ',
+                          LocaleKeys.average_per_day.tr(),
                           style: TextStyle(
                             color: Theme.of(
                               context,

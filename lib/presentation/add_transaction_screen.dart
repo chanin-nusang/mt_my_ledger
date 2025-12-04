@@ -1,13 +1,14 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
-import 'package:intl/intl.dart';
 import 'package:mt_my_ledger/bloc/category_bloc.dart';
 import 'package:mt_my_ledger/bloc/category_state.dart';
 import 'package:mt_my_ledger/bloc/transaction_bloc.dart';
 import 'package:mt_my_ledger/bloc/transaction_event.dart';
+import 'package:mt_my_ledger/generated/locale_keys.g.dart';
 import 'package:mt_my_ledger/models/transaction.dart';
 import 'package:uuid/uuid.dart';
 
@@ -53,9 +54,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
   Future<void> _processTextWithGemini() async {
     if (_textController.text.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Please enter some text.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(LocaleKeys.please_enter_text.tr())),
+      );
       return;
     }
 
@@ -67,10 +68,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       final categoryState = context.read<CategoryBloc>().state;
       List<String> categories = [];
       if (categoryState is CategoryLoaded) {
-        categories = categoryState.categories
-            .where((category) => category.isDefault)
-            .map((e) => e.name)
-            .toList();
+        categories =
+            categoryState.categories
+                .where((category) => category.isDefault)
+                .map((e) => e.name)
+                .toList();
       }
 
       final prompt =
@@ -102,35 +104,40 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               category: category,
               isExpense: isExpense ?? true,
             );
+            if (!context.mounted) return;
             context.read<TransactionBloc>().add(AddTransaction(transaction));
             _textController.clear();
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Transaction added successfully!')),
+              SnackBar(content: Text(LocaleKeys.transaction_added.tr())),
             );
             Navigator.pop(context);
           } else {
+            if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Failed to parse Gemini response. Missing data.'),
-              ),
+              SnackBar(content: Text(LocaleKeys.failed_to_parse_gemini.tr())),
             );
           }
         } else {
+          if (!context.mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Gemini returned empty or invalid JSON.'),
-            ),
+            SnackBar(content: Text(LocaleKeys.gemini_empty_json.tr())),
           );
         }
       } else {
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Gemini response was empty.')),
+          SnackBar(content: Text(LocaleKeys.gemini_empty_response.tr())),
         );
       }
     } catch (e) {
       print(e);
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error processing text: ${e.toString()}')),
+        SnackBar(
+          content: Text(
+            LocaleKeys.error_processing_text.tr(args: [e.toString()]),
+          ),
+        ),
       );
     } finally {
       setState(() {
@@ -168,29 +175,35 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     }
                   },
                   child: Text(
-                    'Date: ${DateFormat.yMMMd().format(_selectedDate)}',
+                    LocaleKeys.date_label.tr(
+                      args: [DateFormat.yMMMd(context.locale.toString()).format(_selectedDate)],
+                    ),
                   ),
                 ),
                 TextFormField(
                   controller: _titleController,
-                  decoration: const InputDecoration(labelText: 'Title'),
+                  decoration: InputDecoration(
+                    labelText: LocaleKeys.title.tr(),
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a title';
+                      return LocaleKeys.please_enter_title.tr();
                     }
                     return null;
                   },
                 ),
                 TextFormField(
                   controller: _amountController,
-                  decoration: const InputDecoration(labelText: 'Amount'),
+                  decoration: InputDecoration(
+                    labelText: LocaleKeys.amount.tr(),
+                  ),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter an amount';
+                      return LocaleKeys.please_enter_amount.tr();
                     }
                     if (double.tryParse(value) == null) {
-                      return 'Please enter a valid number';
+                      return LocaleKeys.please_enter_valid_number.tr();
                     }
                     return null;
                   },
@@ -216,8 +229,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                             _category = value!;
                           });
                         },
-                        decoration: const InputDecoration(
-                          labelText: 'Category',
+                        decoration: InputDecoration(
+                          labelText: LocaleKeys.category.tr(),
                         ),
                       );
                     }
@@ -225,7 +238,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   },
                 ),
                 SwitchListTile(
-                  title: const Text('Expense'),
+                  title: Text(LocaleKeys.expense.tr()),
                   value: _isExpense,
                   onChanged: (value) {
                     setState(() {
@@ -257,7 +270,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       Navigator.pop(context);
                     }
                   },
-                  child: Text(widget.transaction == null ? 'Add' : 'Update'),
+                  child: Text(
+                    widget.transaction == null
+                        ? LocaleKeys.add.tr()
+                        : LocaleKeys.update.tr(),
+                  ),
                 ),
                 if (widget.transaction == null) const SizedBox(height: 20),
                 if (widget.transaction == null)
@@ -268,9 +285,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         Expanded(
                           child: TextField(
                             controller: _textController,
-                            decoration: const InputDecoration(
-                              hintText:
-                                  'Enter transaction details (e.g., ค่าสุกี้ 200 บาท)',
+                            decoration: InputDecoration(
+                              hintText: LocaleKeys.enter_transaction_details_hint
+                                  .tr(),
                               border: OutlineInputBorder(),
                             ),
                           ),
@@ -280,7 +297,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                             ? const CircularProgressIndicator()
                             : ElevatedButton(
                                 onPressed: _processTextWithGemini,
-                                child: const Text('Process'),
+                                child: Text(LocaleKeys.process.tr()),
                               ),
                       ],
                     ),

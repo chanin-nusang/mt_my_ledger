@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mt_my_ledger/bloc/auth/auth_bloc.dart';
 import 'package:mt_my_ledger/bloc/theme_bloc.dart';
 import 'package:mt_my_ledger/core/extensions/screen_utils.dart';
+import 'package:mt_my_ledger/generated/locale_keys.g.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -38,9 +40,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final spendingLimit = double.tryParse(_spendingLimitController.text);
     if (spendingLimit != null) {
       await prefs.setDouble('spending_limit', spendingLimit);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('บันทึกงบประมาณแล้ว')));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(LocaleKeys.budget_saved.tr())));
+      }
     }
   }
 
@@ -60,7 +64,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               errorWidget: (context, url, error) => CircleAvatar(
                 backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                 radius: 40,
-                child: Icon(Icons.person, size: 40),
+                child: const Icon(Icons.person, size: 40),
               ),
             ),
           )
@@ -68,16 +72,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
           CircleAvatar(
             backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             radius: 40,
-            child: Icon(Icons.person, size: 40),
+            child: const Icon(Icons.person, size: 40),
           ),
         const SizedBox(height: 16),
         Text(
-          user.displayName ?? 'No Name',
+          user.displayName ?? LocaleKeys.no_name.tr(),
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 8),
         Text(
-          user.email ?? 'No Email',
+          user.email ?? LocaleKeys.no_email.tr(),
           style: Theme.of(context).textTheme.bodyMedium,
         ),
       ],
@@ -87,21 +91,84 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _buildSettingsList(BuildContext context) {
     return ListView(
       children: [
+        ListTile(
+          title: Text(LocaleKeys.language.tr()),
+          subtitle: Text(
+            context.locale.languageCode == 'th'
+                ? LocaleKeys.thai.tr()
+                : context.locale.languageCode == 'ko'
+                    ? LocaleKeys.korean.tr()
+                    : LocaleKeys.english.tr(),
+          ),
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text(LocaleKeys.language.tr()),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    RadioListTile<String>(
+                      title: Text(LocaleKeys.thai.tr()),
+                      value: 'th',
+                      groupValue: context.locale.languageCode,
+                      onChanged: (value) {
+                        context.setLocale(const Locale('th', 'TH'));
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    RadioListTile<String>(
+                      title: Text(LocaleKeys.english.tr()),
+                      value: 'en',
+                      groupValue: context.locale.languageCode,
+                      onChanged: (value) {
+                        context.setLocale(const Locale('en', 'US'));
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    RadioListTile<String>(
+                      title: Text(LocaleKeys.korean.tr()),
+                      value: 'ko',
+                      groupValue: context.locale.languageCode,
+                      onChanged: (value) {
+                        context.setLocale(const Locale('ko', 'KR'));
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
         BlocBuilder<ThemeBloc, ThemeState>(
           builder: (context, state) {
+            String themeSubtitle;
+            switch (state.themeMode) {
+              case ThemeMode.light:
+                themeSubtitle = LocaleKeys.light_mode.tr();
+                break;
+              case ThemeMode.dark:
+                themeSubtitle = LocaleKeys.dark_mode.tr();
+                break;
+              case ThemeMode.system:
+                themeSubtitle = LocaleKeys.system_default.tr();
+                break;
+            }
+
             return ListTile(
-              title: const Text('ธีมการแสดงผล'),
-              subtitle: Text(state.themeMode.toString().split('.').last),
+              title: Text(LocaleKeys.display_theme.tr()),
+              subtitle: Text(themeSubtitle),
               onTap: () {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: const Text('เลือกธีม'),
+                    title: Text(LocaleKeys.select_theme.tr()),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         RadioListTile<ThemeMode>(
-                          title: const Text('โหมดสว่าง'),
+                          title: Text(LocaleKeys.light_mode.tr()),
                           value: ThemeMode.light,
                           groupValue: state.themeMode,
                           onChanged: (value) {
@@ -112,7 +179,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           },
                         ),
                         RadioListTile<ThemeMode>(
-                          title: const Text('โหมดมืด'),
+                          title: Text(LocaleKeys.dark_mode.tr()),
                           value: ThemeMode.dark,
                           groupValue: state.themeMode,
                           onChanged: (value) {
@@ -123,7 +190,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           },
                         ),
                         RadioListTile<ThemeMode>(
-                          title: const Text('ตามการตั้งค่าระบบ'),
+                          title: Text(LocaleKeys.system_default.tr()),
                           value: ThemeMode.system,
                           groupValue: state.themeMode,
                           onChanged: (value) {
@@ -142,20 +209,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
           },
         ),
         ListTile(
-          title: const Text('งบประมาณที่จำกัดไว้'),
+          title: Text(LocaleKeys.spending_limit.tr()),
           subtitle: Text(
-            '${_spendingLimitController.text.isNotEmpty ? _spendingLimitController.text : 'ไม่ได้ตั้งค่า'} ฿',
+            '${_spendingLimitController.text.isNotEmpty ? _spendingLimitController.text : LocaleKeys.not_set.tr()} ฿',
           ),
           onTap: () {
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: const Text('ตั้งค่างบประมาณ'),
+                title: Text(LocaleKeys.set_spending_limit.tr()),
                 content: TextField(
                   controller: _spendingLimitController,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: 'ใส่งบประมาณของคุณ',
+                  decoration: InputDecoration(
+                    hintText: LocaleKeys.enter_budget.tr(),
                   ),
                 ),
                 actions: [
@@ -163,14 +230,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text('ยกเลิก'),
+                    child: Text(LocaleKeys.cancel.tr()),
                   ),
                   TextButton(
                     onPressed: () {
                       _saveSpendingLimit();
                       Navigator.of(context).pop();
                     },
-                    child: const Text('บันทึก'),
+                    child: Text(LocaleKeys.save.tr()),
                   ),
                 ],
               ),
@@ -185,7 +252,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ตั้งค่า'),
+        title: Text(LocaleKeys.settings.tr()),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -201,10 +268,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           if (context.isMobile) {
             return Column(
               children: [
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 if (user != null) _buildUserProfile(context, user),
-                SizedBox(height: 16),
-                Divider(height: 1),
+                const SizedBox(height: 16),
+                const Divider(height: 1),
                 Expanded(child: _buildSettingsList(context)),
               ],
             );
@@ -214,8 +281,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 if (user != null)
                   Expanded(flex: 3, child: _buildUserProfile(context, user))
                 else
-                  const Expanded(
-                    child: Center(child: Text('ไม่พบข้อมูลผู้ใช้')),
+                   Expanded(
+                    child: Center(child: Text(LocaleKeys.no_user_data.tr())),
                   ),
                 const VerticalDivider(width: 1),
                 Expanded(flex: 4, child: _buildSettingsList(context)),

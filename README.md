@@ -56,3 +56,49 @@ After the build is complete, run the following command to deploy the contents of
 ```bash
 firebase deploy --only hosting
 ```
+
+## Internationalization (i18n)
+
+This application uses the `easy_localization` package for internationalization. Translation files are located in the `assets/translations/` directory.
+
+### Updating or Adding Translations
+
+To update existing translations or add new languages:
+
+1.  **Edit Translation Files:** Modify the `.json` files in `assets/translations/` (e.g., `en.json`, `th.json`).
+    *   For existing keys, update their corresponding translated strings.
+    *   To add new strings, add a new key-value pair to all `.json` files.
+
+2.  **Regenerate Keys (Important):** Whenever you add new keys to the JSON files, you must regenerate the `LocaleKeys` class so you can use them in your code.
+    ```bash
+    flutter pub run easy_localization:generate -S assets/translations -f keys -O lib/generated -o locale_keys.g.dart
+    ```
+
+3.  **Run `flutter pub get`:** After modifying `pubspec.yaml` (e.g., adding a new language), ensure all dependencies are up-to-date.
+    ```bash
+    flutter pub get
+    ```
+
+4.  **Analyze and Build:** Run the Dart analyzer to catch any potential issues, then rebuild or hot restart your application for changes to take effect.
+    ```bash
+    dart analyze
+    flutter run # or hot restart if already running
+    ```
+
+### Adding a New Language
+
+1.  **Create a new `.json` file:** For example, to add Spanish, create `assets/translations/es.json`.
+2.  **Add translations:** Populate the new `es.json` file with all the required key-value pairs, translated into Spanish.
+3.  **Update `main.dart`:** Add the new `Locale` to the `supportedLocales` list in the `EasyLocalization` widget.
+    ```dart
+    EasyLocalization(
+      supportedLocales: const [Locale('th', 'TH'), Locale('en', 'US'), Locale('es', 'ES')], // Add your new locale here
+      path: 'assets/translations',
+      fallbackLocale: const Locale('th', 'TH'),
+      startLocale: const Locale('th', 'TH'),
+      // ...
+    ),
+    ```
+4.  **Update `SettingsScreen` (optional):** If you want to allow users to switch to this new language from within the app, add a `RadioListTile` for it in `lib/presentation/settings_screen.dart`.
+5.  **Run `flutter pub get` and restart the app.**
+

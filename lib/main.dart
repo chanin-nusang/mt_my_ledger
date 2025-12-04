@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mt_my_ledger/bloc/category_bloc.dart';
@@ -33,6 +33,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   if (!kIsWeb) {
@@ -64,10 +65,16 @@ void main() async {
   );
 
   runApp(
-    MyApp(
-      transactionBox: transactionBox,
-      categoryBox: categoryBox,
-      authRepository: authRepository,
+    EasyLocalization(
+      supportedLocales: const [Locale('th', 'TH'), Locale('en', 'US'), Locale('ko', 'KR')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('th', 'TH'),
+      startLocale: const Locale('th', 'TH'),
+      child: MyApp(
+        transactionBox: transactionBox,
+        categoryBox: categoryBox,
+        authRepository: authRepository,
+      ),
     ),
   );
 }
@@ -110,16 +117,9 @@ class MyApp extends StatelessWidget {
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 title: 'My Ledger',
-                locale: const Locale('th', 'TH'),
-                supportedLocales: const [
-                  Locale('th', 'TH'),
-                  Locale('en', 'US'),
-                ],
-                localizationsDelegates: const [
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                ],
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
                 theme: AppTheme.light,
                 darkTheme: AppTheme.dark,
                 themeMode: themeState.themeMode,
