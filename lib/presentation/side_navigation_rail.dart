@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mt_my_ledger/core/extensions/screen_utils.dart';
+import 'package:mt_my_ledger/generated/locale_keys.g.dart';
 import 'package:mt_my_ledger/models/tab_icon_data.dart';
 
 class SideNavigationRail extends StatefulWidget {
@@ -110,13 +112,13 @@ class _SideNavigationRailState extends State<SideNavigationRail> {
   String _getLabelForIndex(int index) {
     switch (index) {
       case 0:
-        return 'Home';
+        return LocaleKeys.home.tr();
       case 1:
-        return 'Transactions';
+        return LocaleKeys.transactions.tr();
       case 2:
-        return 'Category';
+        return LocaleKeys.category.tr();
       case 3:
-        return 'Settings';
+        return LocaleKeys.settings.tr();
       default:
         return '';
     }
